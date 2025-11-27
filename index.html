@@ -1,42 +1,105 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tambo de Camar - Visualización Avanzada</title>
-    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
-    
-    <style>
-        body { margin: 0; background-color: #f7f7f7; font-family: sans-serif; }
-        model-viewer { width: 100vw; height: 100vh; }
-        
-        /* Botón personalizado para activar AR */
-        #ar-button {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background-color: white; border-radius: 30px; border: 1px solid #dadce0;
-            padding: 10px 24px; font-weight: 500; color: #1a73e8; font-size: 14px;
-            box-shadow: 0px 2px 4px rgba(0,0,0,0.2); cursor: pointer;
-            display: flex; align-items: center; gap: 8px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tambo de Camar - Visualización Avanzada</title>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+    
+    <style>
+        /* Estilos generales */
+        body { 
+            margin: 0; 
+            background-color: #f7f7f7; 
+            font-family: sans-serif; 
+        }
+        model-viewer { 
+            width: 100vw; 
+            height: 100vh; 
+        }
+        
+        /* Botón personalizado para activar AR */
+        #ar-button {
+            position: absolute; 
+            bottom: 30px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            background-color: white; 
+            border-radius: 30px; 
+            border: 1px solid #dadce0;
+            padding: 10px 24px; 
+            font-weight: 500; 
+            color: #1a73e8; 
+            font-size: 14px;
+            box-shadow: 0px 2px 4px rgba(0,0,0,0.2); 
+            cursor: pointer;
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+            /* Por defecto, lo ocultamos hasta que verifiquemos compatibilidad */
+            display: none; 
+        }
+
+        /* Estilo para mostrar el mensaje de error/no-soporte */
+        #error {
+            position: absolute; 
+            bottom: 30px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            padding: 8px 15px;
+            background-color: rgba(255, 0, 0, 0.7);
+            color: white;
+            border-radius: 5px;
+            font-size: 12px;
+            z-index: 10;
+            display: none; /* Oculto por defecto */
+        }
+    </style>
 </head>
 <body>
 
-    <model-viewer 
-        src="./tambo.glb"
-        alt="Modelo 3D Tambo de Camar"
-        ar
-        ar-modes="webxr scene-viewer quick-look" 
-        camera-controls 
-        shadow-intensity="1"
-        exposure="1"
-        tone-mapping="commerce"
-        scale="0.118 0.118 0.118"> <button slot="ar-button" id="ar-button">
-            👋 Ver en tu espacio (AR)
-        </button>
-        
-        <div id="error" class="hide">AR no soportado en este dispositivo</div>
-    </model-viewer>
+    <model-viewer 
+        id="model"
+        src="./tambo.glb"
+        alt="Modelo 3D Tambo de Camar"
+        ar
+        ar-modes="webxr scene-viewer quick-look" 
+        camera-controls 
+        shadow-intensity="1"
+        exposure="1"
+        tone-mapping="commerce"
+        scale="0.118 0.118 0.118"> 
+        
+        <button slot="ar-button" id="ar-button">
+            👋 Ver en tu espacio (AR)
+        </button>
+        
+        <div id="error">AR no soportado en este dispositivo</div>
+
+    </model-viewer>
+
+    <script>
+        // Obtenemos los elementos que vamos a manipular
+        const modelViewer = document.getElementById('model');
+        const arButton = document.getElementById('ar-button');
+        const arError = document.getElementById('error');
+
+        // 1. Verificar si AR está disponible en el dispositivo
+        // 'model-viewer' emite el evento 'ar-status' cuando se inicializa
+        modelViewer.addEventListener('ar-status', (event) => {
+            if (event.detail.status === 'ready') {
+                // Si está listo, mostramos el botón de AR
+                arButton.style.display = 'flex';
+                arError.style.display = 'none';
+            } else if (event.detail.status === 'failed') {
+                // Si falla (no compatible, no HTTPS, etc.), mostramos el mensaje de error
+                arButton.style.display = 'none';
+                arError.style.display = 'block';
+                console.error('El modo AR ha fallado. Causas comunes: dispositivo no compatible o no servido en HTTPS/localhost.');
+            }
+        });
+    </script>
 
 </body>
 </html>
+
