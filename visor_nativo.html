@@ -3,39 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tambo de Camar - Visualización Avanzada</title>
-    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+    <title>Visor Tambo - Google</title>
     
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+
     <style>
-        body { margin: 0; background-color: #f7f7f7; font-family: sans-serif; }
-        model-viewer { width: 100vw; height: 100vh; }
-        
-        /* Botón personalizado para activar AR */
-        #ar-button {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background-color: white; border-radius: 30px; border: 1px solid #dadce0;
-            padding: 10px 24px; font-weight: 500; color: #1a73e8; font-size: 14px;
-            box-shadow: 0px 2px 4px rgba(0,0,0,0.2); cursor: pointer;
-            display: flex; align-items: center; gap: 8px;
-        }
+        /* Esto asegura que el visor ocupe toda la pantalla */
+        body { margin: 0; padding: 0; width: 100vw; height: 100vh; background-color: #f0f0f0; }
+        model-viewer { width: 100%; height: 100%; }
     </style>
 </head>
 <body>
 
     <model-viewer 
-        src="./tambo.glb"
-        alt="Modelo 3D Tambo de Camar"
-        ar
+        src="./tambo.glb" 
+        alt="Modelo 3D del Tambo"
+        ar 
         ar-modes="webxr scene-viewer quick-look" 
         camera-controls 
-        shadow-intensity="1"
-        exposure="1"
-        tone-mapping="commerce"
-        scale="0.018 0.018 0.018"> <button slot="ar-button" id="ar-button">
-            👋 Ver en tu espacio (AR)
-        </button>
+        shadow-intensity="1" 
+        scale="0.018 0.018 0.018">
         
-        <div id="error" class="hide">AR no soportado en este dispositivo</div>
+        <button slot="ar-button" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 10px 20px; border-radius: 20px; border: none; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+            👋 Ver en Realidad Aumentada
+        </button>
+
     </model-viewer>
 
 </body>
