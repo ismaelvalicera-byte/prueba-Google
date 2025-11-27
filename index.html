@@ -7,23 +7,50 @@
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
     
     <style>
-        /* (Se omiten los estilos CSS por brevedad, son los mismos que ya tienes) */
-        body { margin: 0; background-color: #f7f7f7; font-family: sans-serif; }
-        model-viewer { width: 100vw; height: 100vh; }
-        
-        #ar-button {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background-color: white; border-radius: 30px; border: 1px solid #dadce0;
-            padding: 10px 24px; font-weight: 500; color: #1a73e8; font-size: 14px;
-            box-shadow: 0px 2px 4px rgba(0,0,0,0.2); cursor: pointer;
-            display: flex; align-items: center; gap: 8px;
-            display: none; /* Oculto por defecto hasta verificación */
+        /* Estilos generales */
+        body { 
+            margin: 0; 
+            background-color: #f7f7f7; 
+            font-family: sans-serif; 
         }
+        model-viewer { 
+            width: 100vw; 
+            height: 100vh; 
+        }
+        
+        /* Botón personalizado para activar AR */
+        #ar-button {
+            position: absolute; 
+            bottom: 30px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            background-color: white; 
+            border-radius: 30px; 
+            border: 1px solid #dadce0;
+            padding: 10px 24px; 
+            font-weight: 500; 
+            color: #1a73e8; 
+            font-size: 14px;
+            box-shadow: 0px 2px 4px rgba(0,0,0,0.2); 
+            cursor: pointer;
+            display: flex; /* CAMBIO CLAVE: Lo forzamos a ser visible */
+            align-items: center; 
+            gap: 8px;
+        }
+
+        /* Estilo para mostrar el mensaje de error/no-soporte */
         #error {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            padding: 8px 15px; background-color: rgba(255, 0, 0, 0.7);
-            color: white; border-radius: 5px; font-size: 12px; z-index: 10;
-            display: none; /* Oculto por defecto */
+            position: absolute; 
+            bottom: 30px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            padding: 8px 15px;
+            background-color: rgba(255, 0, 0, 0.7);
+            color: white;
+            border-radius: 5px;
+            font-size: 12px;
+            z-index: 10;
+            display: none; /* CAMBIO CLAVE: Lo forzamos a estar oculto */
         }
     </style>
 </head>
@@ -50,29 +77,26 @@
 
     </model-viewer>
 
-<script>
-        // ESTE ES EL CÓDIGO A COMENTAR O ELIMINAR TEMPORALMENTE
-        /*
+    <script>
+        // Este script ahora SOLO se usa para debug y logs. 
+        // La visibilidad del botón se maneja en CSS para forzar la interacción.
         const modelViewer = document.getElementById('model');
-        const arButton = document.getElementById('ar-button');
-        const arError = document.getElementById('error');
 
         modelViewer.addEventListener('ar-status', (event) => {
             const status = event.detail.status;
             
-            if (status === 'ready') {
-                // Forzamos el botón a estar visible en el CSS
-                // arButton.style.display = 'flex'; 
-                arError.style.display = 'none';
-            } else if (status === 'failed' || status === 'not-present') {
-                arButton.style.display = 'none';
-                arError.style.display = 'block';
+            if (status === 'failed' || status === 'not-present') {
+                 // Si falla, puedes usar esta línea para mostrar el error, 
+                 // pero por ahora lo dejamos invisible para priorizar el clic.
+                 // document.getElementById('error').style.display = 'block'; 
+                 console.error('AR Fallido. Causa: dispositivo incompatible o error de permisos.');
+            } else if (status === 'ready') {
+                console.log('Dispositivo compatible con AR.');
             }
         });
-        */
+        
+        // El AR se activa únicamente cuando el usuario presiona el botón.
     </script>
 
 </body>
 </html>
-
-
