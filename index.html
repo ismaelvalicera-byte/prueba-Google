@@ -36,8 +36,7 @@
             display: flex; 
             align-items: center; 
             gap: 8px;
-            /* Por defecto, lo ocultamos hasta que verifiquemos compatibilidad */
-            display: none; 
+            display: none; /* Oculto por defecto */
         }
 
         /* Estilo para mostrar el mensaje de error/no-soporte */
@@ -68,7 +67,11 @@
         shadow-intensity="1"
         exposure="1"
         tone-mapping="commerce"
-        scale="0.118 0.118 0.118"> 
+        scale="0.118 0.118 0.118"
+        
+        /* ATRIBUTO CLAVE: PIDE PERMISO DE CÁMARA CUANDO EL USUARIO HACE CLIC */
+        ar-placement="floor" /* Ayuda a la experiencia AR a encontrar una superficie */
+        > 
         
         <button slot="ar-button" id="ar-button">
             👋 Ver en tu espacio (AR)
@@ -79,27 +82,35 @@
     </model-viewer>
 
     <script>
-        // Obtenemos los elementos que vamos a manipular
+        // Obtenemos los elementos
         const modelViewer = document.getElementById('model');
         const arButton = document.getElementById('ar-button');
         const arError = document.getElementById('error');
 
-        // 1. Verificar si AR está disponible en el dispositivo
-        // 'model-viewer' emite el evento 'ar-status' cuando se inicializa
+        // Escuchamos el evento de estado de AR para mostrar el botón solo si es compatible
         modelViewer.addEventListener('ar-status', (event) => {
-            if (event.detail.status === 'ready') {
-                // Si está listo, mostramos el botón de AR
+            const status = event.detail.status;
+            
+            if (status === 'ready') {
+                // Compatible: Muestra el botón de AR
                 arButton.style.display = 'flex';
                 arError.style.display = 'none';
-            } else if (event.detail.status === 'failed') {
-                // Si falla (no compatible, no HTTPS, etc.), mostramos el mensaje de error
+            } else if (status === 'failed' || status === 'not-present') {
+                // No compatible o error: Muestra el mensaje de error
                 arButton.style.display = 'none';
                 arError.style.display = 'block';
-                console.error('El modo AR ha fallado. Causas comunes: dispositivo no compatible o no servido en HTTPS/localhost.');
+                console.error('El modo AR ha fallado. Revisar: compatibilidad del dispositivo, HTTPS/localhost.');
+            } else if (status === 'session-starting') {
+                // Opcional: Mostrar un loader mientras se activa la cámara
+                console.log('Iniciando sesión AR...');
             }
+        });
+
+        // Asegurarse de que el modelo esté cargado para evitar problemas
+        modelViewer.addEventListener('load', () => {
+            console.log('Modelo 3D cargado correctamente.');
         });
     </script>
 
 </body>
 </html>
-
