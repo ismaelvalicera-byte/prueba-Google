@@ -50,8 +50,9 @@
 
     </model-viewer>
 
-    <script>
-        // Script para verificar compatibilidad y mostrar/ocultar el botón
+script>
+        // ESTE ES EL CÓDIGO A COMENTAR O ELIMINAR TEMPORALMENTE
+        /*
         const modelViewer = document.getElementById('model');
         const arButton = document.getElementById('ar-button');
         const arError = document.getElementById('error');
@@ -60,17 +61,17 @@
             const status = event.detail.status;
             
             if (status === 'ready') {
-                // Muestra el botón de AR
-                arButton.style.display = 'flex';
+                // Forzamos el botón a estar visible en el CSS
+                // arButton.style.display = 'flex'; 
                 arError.style.display = 'none';
             } else if (status === 'failed' || status === 'not-present') {
-                // Muestra el mensaje de error
                 arButton.style.display = 'none';
                 arError.style.display = 'block';
-                // La solución es usar Live Server (localhost) o un servidor HTTPS
             }
         });
+        */
     </script>
 
 </body>
 </html>
+
